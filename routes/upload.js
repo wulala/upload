@@ -5,7 +5,6 @@ const dayjs = require('dayjs')
 const multer = require('multer')
 
 
-
 const storageDate = multer.diskStorage({
     destination: (req, file, cb) => {
 
@@ -72,8 +71,6 @@ router.get('/news/get', function (req, res, next) {
 
 router.post('/news/set', function (req, res, next) {
 
-
-
     const path = 'public/uploads/' + dayjs().format('YYYYMMDD')
     if (!fs.existsSync(path)) {
         fs.mkdirSync(path, { recursive: true });
@@ -86,6 +83,47 @@ router.post('/news/set', function (req, res, next) {
         status: 1,
         msg: 'completed'
     })
+});
+
+// 新一份, 其他的已经制作完成了
+router.get('/news/new', function (req, res, next) {
+
+    const _path = 'public/uploads/' + dayjs().format('YYYYMMDD')
+
+    if (!fs.existsSync(_path)) {
+        fs.mkdirSync(_path, { recursive: true });
+    }
+
+    const path = _path + '/data.json'
+    let data = []
+
+    if (fs.existsSync(path)) {
+        const _data = fs.readFileSync(path, 'utf-8')
+        if (_data) data = JSON.parse(_data)
+    }
+
+    console.log(data, 'data')
+
+    const backupPath = _path + '/backup.json'
+    let backupData = []
+
+    if (fs.existsSync(backupPath)) {
+        const _backupData = fs.readFileSync(backupPath, 'utf-8')
+        if (_backupData) backupData = JSON.parse(_backupData)
+    }
+
+    console.log(backupData, 'backupData')
+
+
+    fs.writeFileSync(path, JSON.stringify([]))
+
+    fs.writeFileSync(backupPath, JSON.stringify([...data, ...backupData]))
+
+    res.json({
+        status: 1,
+        data: []
+    })
+
 });
 
 
