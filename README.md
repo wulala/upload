@@ -1,5 +1,3 @@
 # upload
-upload.rabc.cc
 
-
-add webhook ... 11:55
+上传图片到服务器. file版本
