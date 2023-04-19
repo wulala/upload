@@ -38,11 +38,11 @@ const storageNone = multer.diskStorage({
 
 
 const uploadDate = multer({ storage: storageDate }).single('file')
-const uploadNone = multer({ storage: storageNone }).single('file')
+// const uploadNone = multer({ storage: storageNone }).single('file')
 
 
 /* GET users listing. */
-router.post('/news', uploadDate, function (req, res, next) {
+router.post('/news/upload', uploadDate, function (req, res, next) {
     let path = req.file.path.replace(/\\/g, '/').replace('public/', '/')
     res.json({
         status: 1,
@@ -70,7 +70,6 @@ router.get('/news/get', function (req, res, next) {
 });
 
 router.post('/news/set', function (req, res, next) {
-
     const path = 'public/uploads/' + dayjs().format('YYYYMMDD')
     if (!fs.existsSync(path)) {
         fs.mkdirSync(path, { recursive: true });
@@ -78,12 +77,51 @@ router.post('/news/set', function (req, res, next) {
 
     fs.writeFileSync(path + '/data.json', JSON.stringify(req.body))
 
+    res.json({
+        status: 1,
+        msg: 'completed'
+    })
+});
+
+
+
+router.get('/topic/get', function (req, res, next) {
+
+    const path = 'public/uploads/topic/data.json'
+
+    if (!fs.existsSync(path)) {
+        return res.json({
+            status: 0,
+            msg: 'empty'
+        })
+    }
+
+    const data = fs.readFileSync(path, 'utf-8')
+
+    res.json({
+        status: 1,
+        data: JSON.parse(data)
+    })
+});
+
+router.post('/topic/set', function (req, res, next) {
+
+    const path = 'public/uploads/topic'
+    const json = path + '/data.json'
+
+    if (!fs.existsSync(path)) {
+        fs.mkdirSync(path, { recursive: true });
+    }
+
+    fs.writeFileSync(json, JSON.stringify(req.body))
 
     res.json({
         status: 1,
         msg: 'completed'
     })
 });
+
+
 
 // 新一份, 其他的已经制作完成了
 router.get('/news/new', function (req, res, next) {
