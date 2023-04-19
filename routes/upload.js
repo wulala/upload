@@ -21,10 +21,10 @@ const storageDate = multer.diskStorage({
 })
 
 
-const storageNone = multer.diskStorage({
+const storageTopic = multer.diskStorage({
     destination: (req, file, cb) => {
 
-        const path = 'public/uploads/other/'
+        const path = 'public/uploads/topic/'
         if (!fs.existsSync(path)) {
             fs.mkdirSync(path, { recursive: true });
         }
@@ -38,11 +38,19 @@ const storageNone = multer.diskStorage({
 
 
 const uploadDate = multer({ storage: storageDate }).single('file')
-// const uploadNone = multer({ storage: storageNone }).single('file')
+const uploadTopic = multer({ storage: storageTopic }).single('file')
 
 
 /* GET users listing. */
 router.post('/news/upload', uploadDate, function (req, res, next) {
+    let path = req.file.path.replace(/\\/g, '/').replace('public/', '/')
+    res.json({
+        status: 1,
+        data: { path }
+    })
+});
+
+router.post('/topic/upload', uploadTopic, function (req, res, next) {
     let path = req.file.path.replace(/\\/g, '/').replace('public/', '/')
     res.json({
         status: 1,
