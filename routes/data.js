@@ -3,9 +3,10 @@ var router = express.Router();
 var fs = require('fs')
 const dayjs = require('dayjs')
 
-const d = dayjs().format('YYYYMMDD')
+
 
 router.get('/news/get', function (req, res, next) {
+    const d = dayjs().format('YYYYMMDD')
 
     const path = 'public/uploads/news/' + d + '.json'
 
@@ -25,6 +26,7 @@ router.get('/news/get', function (req, res, next) {
 });
 
 router.post('/news/set', function (req, res, next) {
+    const d = dayjs().format('YYYYMMDD')
 
     const path = 'public/uploads/news/'
     const json = path + d + '.json'
@@ -44,6 +46,7 @@ router.post('/news/set', function (req, res, next) {
 
 
 router.get('/topic/get', function (req, res, next) {
+    const d = dayjs().format('YYYYMMDD')
 
     const path = 'public/uploads/topic/data.json'
 
@@ -63,6 +66,7 @@ router.get('/topic/get', function (req, res, next) {
 });
 
 router.post('/topic/set', function (req, res, next) {
+    const d = dayjs().format('YYYYMMDD')
 
     const path = 'public/uploads/topic/'
     const json = path + 'data.json'
